@@ -8,7 +8,7 @@ def Draw(profilePath, name="Facebook user", output='commands/cache/output.jpg'):
     
     draw = ImageDraw.Draw(base_image)
     
-    font = ImageFont.truetype('commands/cache/ARIAL.TTF', 35)
+    font = ImageFont.truetype('commands/cache/font/Roboto.ttf', 35)
     draw.text((230, 585), name, fill=(30,103,204), font=font)
     
     overlay_image_path = profilePath
@@ -33,7 +33,6 @@ async def Hack(bot, event):
   if event.args:
     obj = event.message_object
     if len(obj.mentions)!=0:
-      print(obj.mentions[0].thread_id)
       uid = obj.mentions[0].thread_id
       name = await event.getName(uid)
     else:
@@ -58,15 +57,17 @@ async def Hack(bot, event):
     if isinstance(hacked, tuple):
       bot.error(f"Error while drawing the hack image", 'hack.py')
     await bot.sendLocalFiles(hacked,
-      "Successfully hacked, the password has been sent to the owner.",
+      f"Successfully hacked, the password has been sent to {"the owner" if uid == event.author_id else event.author_name}.",
       event.thread_id, event.thread_type
     )
   except Exception as e:
+    await event.sendReply(f"{e}", True)
     bot.error(f"{e}", 'hack.py')
 
 config = dict(
   name = "hack",
   function = Hack,
+  usage = "{p}hack [<None>|<reply>|<mention>|<uid>]",
   author = 'Muhammad Greeg',
   usePrefix = False
 )

@@ -52,8 +52,13 @@ class MessageData:
     text = self.font(message) if auto_font else message
     return await self.bot.sendMessage(text, self.thread_id, self.thread_type, reply_to_id=self.mid, mentions=mentions)
 
-async def handleMessage(bot,mid,author_id,message,message_object,thread_id,thread_type,**kwargs):
+async def handleMessage(bot, **kwargs):
   try:
+    thread_id = kwargs.get('thread_id')
+    thread_type = kwargs.get('thread_type')
+    message = kwargs.get('message')
+    author_id = kwargs.get('author_id')
+    
     _split = message.split(' ',1) if message else ['']
     cmd, args = _split if len(_split) != 1 else [_split[0],'']
     cnp = cmd if bot.prefix == "" or not cmd.startswith(bot.prefix) else cmd[1:];cnp = cnp.lower()
@@ -70,19 +75,15 @@ async def handleMessage(bot,mid,author_id,message,message_object,thread_id,threa
         message_data = MessageData(
           cmd = cnp,
           args = args,
-          mid = mid,
           client = bot,
           author_name = sender,
-          author_id = author_id,
-          message = message,
-          message_object = message_object,
-          thread_id = thread_id,
-          thread_type = thread_type
+          **kwargs
         )
         mtg = f"[blue]ThreadID : [/blue] {thread_id}\n"
         mtg += f"[blue]Sender   : [/blue] {sender}\n"
+        mtg += f"[blue]UID      : [/blue] {author_id}\n"
         mtg += f"[blue]Command  : [/blue] [yellow]{cnp}[/yellow]"
-        pnl = bot.logInfo(mtg, title=author_id)
+        pnl = bot.logInfo(mtg)
         return await function['def'](bot, message_data)
   except bot.FBchatFacebookError as err:
     bot.error(f"{err}", 'FBchatFacebookError')

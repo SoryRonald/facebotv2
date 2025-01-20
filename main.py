@@ -48,16 +48,16 @@ class Greeg(Client):
     print()
   async def _botEvent(self, event, **data):
     asyncio.create_task(handleEvent(self, event.lower(), **data))
-  async def _messaging(self, mid, author_id, message, message_object, thread_id, thread_type, **kwargs):
-    if author_id != self.uid:
-      await self._botEvent('type:message', mid=mid,author_id=author_id,message=message,message_object=message_object,thread_id=thread_id,thread_type=thread_type,**kwargs)
-      asyncio.create_task(handleMessage(self,mid,author_id,message,message_object,thread_id,thread_type,**kwargs))
+  async def _messaging(self, **kwargs):
+    if kwargs['author_id'] != self.uid:
+      await self._botEvent('type:message', **kwargs)
+      asyncio.create_task(handleMessage(self, **kwargs))
   
   """MESSAGE EVENTS"""
-  async def onReply(self, mid, author_id, message, message_object, thread_id,thread_type, **kwargs):
-    await self._messaging(mid, author_id, message, message_object, thread_id,  thread_type, **kwargs)
-  async def onMessage(self,mid,author_id,message,message_object,thread_id,thread_type,**kwargs):
-    await self._messaging(mid, author_id, message, message_object, thread_id,  thread_type, **kwargs)
+  async def onReply(self, **kwargs):
+    await self._messaging(**kwargs)
+  async def onMessage(self, **kwargs):
+    await self._messaging(**kwargs)
   
   """OTHER EVENTS"""
   async def onPeopleAdded(self, **data):

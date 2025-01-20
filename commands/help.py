@@ -33,6 +33,10 @@ async def function(bot, event):
   
   if sub.lower() == 'all':
     message = getAll(commands, xzxc)
+    message += f"╭──── :bold[EVENTS] ─────\n"
+    for ib in bot.events:
+      message += f"│ ○ {ib['fileName']}\n"
+    message += f"╰────{'─'*len('EVENTS')}─────\n\n"
     message += f"📦 Total commands: {len(commands)}\n"
     message += f"ⓘ 𝖨𝖿 𝗒𝗈𝗎 𝗁𝖺𝗏𝖾 𝖺𝗇𝗒 𝗊𝗎𝖾𝗌𝗍𝗂𝗈𝗇𝗌 𝗈𝗋 𝗇𝖾𝖾𝖽 𝖺𝗌𝗌𝗂𝗌𝗍𝖺𝗇𝖼𝖾, 𝗉𝗅𝖾𝖺𝗌𝖾 𝖼𝗈𝗇𝗍𝖺𝖼𝗍 𝗍𝗁𝖾 𝖽𝖾𝗏𝖾𝗅𝗈𝗉𝖾𝗋."
     return await event.sendReply(message, True)

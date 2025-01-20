@@ -18,6 +18,7 @@ def loadEvents():
     module = importlib.import_module(filepath)
     config = getattr(module, 'config', None)
     if config:
+      config['fileName'] = file
       event_type = config.get('event')
       function = config.get('def')
       if not event_type:

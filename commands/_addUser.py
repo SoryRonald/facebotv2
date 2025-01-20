@@ -3,7 +3,7 @@ from util import getUid
 async def add_user(bot, event):
   if not event.args:
     return await event.sendReply("Missing an argument")
-  if event.thread_type == bot.thread_user:
+  if event.thread_type == bot.ThreadType.USER:
     return await event.sendReply("This command only works in group chat")
   if not event.args:
     return await event.sendReply("Please provide a uid or link of the user you want to add")

@@ -32,20 +32,23 @@ class Greeg(Client):
     self.FBchatException = FBchatException
     self.FBchatFacebookError = FBchatFacebookError
     # models
-    self.thread_user = ThreadType.USER
-    self.thread_location = ThreadLocation
+    self.ThreadType = ThreadType
+    self.ThreadLocation = ThreadLocation
     # console
     self.console = Console()
     self.panel = Panel
+  async def onListening(self):
+    print("\033[32m[BOT] \033[0mListening...")
+    await self._botEvent('type:listening', isOnline=True)
+    print()
+  
+  """CUSTOM METHOD"""
   def error(self, message, title="ERROR"):
     error = Panel(message, title=title, border_style='red')
     Console().print(error)
   def logInfo(self, message, title="INFO"):
     info = Panel(message, title=title, border_style='blue')
     Console().print(info)
-  async def onListening(self):
-    print("\033[32m[BOT] \033[0mListening...")
-    print()
   async def _botEvent(self, event, **data):
     asyncio.create_task(handleEvent(self, event.lower(), **data))
   async def _messaging(self, **kwargs):

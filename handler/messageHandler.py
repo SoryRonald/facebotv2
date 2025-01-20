@@ -34,6 +34,7 @@ class MessageData:
     
     self.mid = data.get('mid')
     self.author_id = data.get('author_id')
+    self.author_name = data.get('author_name')
     self.message = data.get('message')
     self.message_object = data.get('message_object')
     self.thread_id = data.get('thread_id')
@@ -46,7 +47,7 @@ class MessageData:
     if self.message_object.replied_to:
       self.reply = self.message_object.replied_to
   async def getName(self, uid):
-    name = await get_name(self.bot.fetchUserInfo, self.uid)
+    name = await get_name(self.bot.fetchUserInfo, uid)
     return name
   async def sendReply(self, message, auto_font=False, mentions=None):
     text = self.font(message) if auto_font else message

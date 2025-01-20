@@ -1,4 +1,5 @@
 fbchat-muqit
+Pillow
 requests
 bs4
 dataset

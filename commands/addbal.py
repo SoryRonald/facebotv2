@@ -1,4 +1,4 @@
-from database import Bank
+from database import User
 
 async def fubction(bot, event):
   try:
@@ -7,9 +7,9 @@ async def fubction(bot, event):
       return await event.sendReply(":mono[ERROR: Invalid usage]",True)
     elif not args:
       return await event.sendReply(":mono[ERROR: Missing amount of money to send]",True)
-    user = Bank(int(sub))
-    n = user.add_money(int(args))
-    await event.sendReply(f"Successfully added {args} to {sub}\n\n:bold[Balance:] {n}", True)
+    user = User(int(sub))
+    n = user.addMoney(int(args))
+    await event.sendReply(f"Successfully added :bold[{args}] to {n.name}\n\n:bold[Balance:] {n}", True)
   except ValueError:
     await event.sendReply(":mono[Value error, please try again]",True)
 

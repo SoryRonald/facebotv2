@@ -47,7 +47,7 @@ class Database:
     self.db.upsert(row, keys)
 
 
-class User(Database):
+class Users(Database):
   def __init__(self):
     super().__init__('users')
   
@@ -55,7 +55,7 @@ class User(Database):
     self.upsert(dict(
       uid = uid,
       name = name,
-      points = 0, # Coming soon
+      points = 0, # Points system
       money = 200, # Bank system
     ), ['uid'])
     log.border_style = 'green'
@@ -70,35 +70,72 @@ class User(Database):
         name = getName(uid)
       self._new(uid, name)
 
-class Bank(User):
+class User(Users):
   def __init__(self, uid):
     super().__init__()
-    self.uid = uid
-    if not self.get(self.uid):
+    self.uid = str(uid)
+    self.info = self.get(self.uid)
+    if not self.info:
       self.add(self.uid)
-  @property
-  def balance(self):
-    user = self.get(self.uid)
-    return user.get('money', 0)
+      self.info = self.get(self.uid)
   
-  def add_money(self, amount:int):
-    prev = self.balance
+  @property
+  def name(self) -> str:
+    return self.info.get('name')
+  
+  @property
+  def points(self) -> int:
+    return self.row.get('points')
+  
+  @property
+  def money(self) -> int:
+    return self.row.get('money')
+  
+  """POINTS"""
+  def addPoints(self, value: int|float) -> None:
+    prev = self.points
+    
+    # check if value is float, and convert into integer
+    if isinstance(value, float):
+      value = int(value)
+    
+    # check if value is valid to add
+    if value < 0:
+      log.border_style = 'red'
+      log.message("[bold red]POINTS[/bold red] Invalid value")
+      raise ValueError("Invalid value, it must be integers or float")
+      
+    # check if value type is not integer
+    if not isinstance(value, int):
+      log.border_style = 'red'
+      log.message("[bold red]POINTS[/bold red] Invalid value")
+      raise ValueError("Invalid value, it must be integers or float")
+    
+    new = prev + value
+    self.upsert(dict(uid=self.uid, points=new), ['uid'])
+  
+  """BANK"""
+  def addMoney(self, amount:int):
+    prev = self.money
     if not isinstance(amount, int):
-      print("\033[91m[BANK] \033[0mInvalid argument")
+      log.border_style = 'red'
+      log.message("[bold red]BANK[/bold red] Invalid argument")
       return prev
     if amount <= 0:
-      print("\033[91m[BANK] \033[0mInvalid amount of money")
+      log.border_style = 'red'
+      log.message("[bold red]BANK[/bold red]  Invalid amount of money")
       return prev
     self.upsert(dict(uid=self.uid,money=prev+amount), ['uid'])
     return prev + amount
-  
-  def sub_money(self, amount:int):
-    prev = self.balance
+  def subMoney(self, amount:int):
+    prev = self.money
     if not isinstance(amount, int):
-      print("\033[91m[BANK] \033[0mInvalid argument")
+      log.border_style = 'red'
+      log.message("[bold red]BANK[/bold red] Invalid argument")
       return prev
     if amount > prev:
-      print(f"\033[91m[BANK] \033[0mCurrent money is not enough to subtract by {amount}")
+      log.border_style = 'red'
+      log.message(f"[bold red]BANK[/bold red] Current money is not enough to subtract by {amount}")
       return prev
     self.upsert(dict(uid=self.uid,money=prev-amount), ['uid'])
     return prev - amount

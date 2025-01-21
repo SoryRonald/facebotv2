@@ -56,6 +56,7 @@ async def function(bot, event):
     await event.sendReply(":mono[Updating thread data, please wait...]",True)
     trabaho(event.thread_id)
     await event.sendReply(":mono[Thread data is now updated]",True)
+
 config = {
   "name": 'update',
   "def": function,

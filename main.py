@@ -51,16 +51,16 @@ class Greeg(Client):
     Console().print(info)
   async def _botEvent(self, event, **data):
     asyncio.create_task(handleEvent(self, event.lower(), **data))
-  async def _messaging(self, **kwargs):
+  async def _messaging(self,event, **kwargs):
     if kwargs['author_id'] != self.uid:
-      await self._botEvent('type:message', **kwargs)
+      await self._botEvent(event, **kwargs)
       asyncio.create_task(handleMessage(self, **kwargs))
   
   """MESSAGE EVENTS"""
   async def onReply(self, **kwargs):
-    await self._messaging(**kwargs)
+    await self._messaging("type:reply",**kwargs)
   async def onMessage(self, **kwargs):
-    await self._messaging(**kwargs)
+    await self._messaging("type:message", **kwargs)
   
   """OTHER EVENTS"""
   async def onPeopleAdded(self, **data):

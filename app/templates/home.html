@@ -6,17 +6,6 @@
 
 {% block content %}
   <div class="container mt-3">
-    {% if bot %}
-      <div class="alert alert-info" role="alert">
-        <b>Name: </b>{{ bot.name }} <br>
-        <b>Uid: </b>{{ bot.uid }} <br>
-        <b>Prefix: </b>{{ bot.prefix }} <br>
-        <b>Owner: </b>{{ bot.owner }} <br>
-        <b>Admin: </b>{{ bot.admins }} <br>
-        <b>Commands: </b>{{ bot.commands }} <br>
-        <b>Events: </b>{{ bot.events }}
-      </div>
-    {% endif %}
     <form class="form-control" method="POST" action="/api/bobot">
       <div class="form-group">
         <label for="appstate">Bot fbstate</label>

@@ -105,8 +105,8 @@ def getName(uid):
     print(e)
     return 'Facebook User'
 
-# pase api
-def paster(paste: str, exp: int|None = None) -> dict:
+# paste api
+def paster(paste: str, exp: int|None = 1) -> dict:
   try:
     session = requests.Session()
     url = "https://pastebin.mozilla.org";

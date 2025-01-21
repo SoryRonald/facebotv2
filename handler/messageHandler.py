@@ -1,29 +1,31 @@
-from database import User
+from database import Users
 from util import (
   text_formatter,
   getName
 )
 import os
 
+
 async def get_name(fetchName, uid):
   try:
-    Users = User()
-    userX = Users.get(uid)
+    users = Users()
+    userX = users.get(uid)
     if userX:
       if userX != 'Facebook User':
         return userX.get('name')
     else:
       nameX = getName(uid)
       if nameX != 'Facebook User':
-        Users.add(uid, nameX)
+        users.add(uid, nameX)
         return nameX
       fetch = await fetchName(uid)
       tao = fetch.get(uid)
       name = tao.name
-      Users.add(uid, name)
+      users.add(uid, name)
       return name
   except Exception as e:
     return "Facebook User"
+
 
 class MessageData:
   def __init__(self, **data):

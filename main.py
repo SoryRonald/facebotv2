@@ -46,8 +46,8 @@ class Greeg(Client):
   def error(self, message, title="ERROR"):
     error = Panel(message, title=title, border_style='red')
     Console().print(error)
-  def logInfo(self, message, title="INFO"):
-    info = Panel(message, title=title, border_style='blue')
+  def logInfo(self, message, title="INFO", border="blue"):
+    info = Panel(message, title=title, border_style=border)
     Console().print(info)
   async def _botEvent(self, event, **data):
     asyncio.create_task(handleEvent(self, event.lower(), **data))

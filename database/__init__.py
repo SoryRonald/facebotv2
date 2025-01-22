@@ -74,14 +74,14 @@ class User(Users):
   def __init__(self, uid):
     super().__init__()
     self.uid = str(uid)
-    self.info = self.get(self.uid)
-    if not self.info:
+    self.row = self.get(self.uid)
+    if not self.row:
       self.add(self.uid)
-      self.info = self.get(self.uid)
+      self.row = self.get(self.uid)
   
   @property
   def name(self) -> str:
-    return self.info.get('name')
+    return self.row.get('name')
   
   @property
   def points(self) -> int:
@@ -113,6 +113,7 @@ class User(Users):
     
     new = prev + value
     self.upsert(dict(uid=self.uid, points=new), ['uid'])
+    return new
   
   """BANK"""
   def addMoney(self, amount:int):

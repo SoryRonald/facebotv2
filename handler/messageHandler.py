@@ -1,30 +1,6 @@
-from database import Users
-from util import (
-  text_formatter,
-  getName
-)
+from database import Users, User
+from util import text_formatter, getName
 import os
-
-
-async def get_name(fetchName, uid):
-  try:
-    users = Users()
-    userX = users.get(uid)
-    if userX:
-      if userX != 'Facebook User':
-        return userX.get('name')
-    else:
-      nameX = getName(uid)
-      if nameX != 'Facebook User':
-        users.add(uid, nameX)
-        return nameX
-      fetch = await fetchName(uid)
-      tao = fetch.get(uid)
-      name = tao.name
-      users.add(uid, name)
-      return name
-  except Exception as e:
-    return "Facebook User"
 
 
 class MessageData:
@@ -55,6 +31,26 @@ class MessageData:
     text = self.font(message) if auto_font else message
     return await self.bot.sendMessage(text, self.thread_id, self.thread_type, reply_to_id=self.mid, mentions=mentions)
 
+async def get_name(fetchName, uid):
+  try:
+    users = Users()
+    userX = users.get(uid)
+    if userX:
+      if userX != 'Facebook User':
+        return userX.get('name')
+    else:
+      nameX = getName(uid)
+      if nameX != 'Facebook User':
+        users.add(uid, nameX)
+        return nameX
+      fetch = await fetchName(uid)
+      tao = fetch.get(uid)
+      name = tao.name
+      users.add(uid, name)
+      return name
+  except Exception as e:
+    return "Facebook User"
+
 async def handleMessage(bot, **kwargs):
   try:
     thread_id = kwargs.get('thread_id')
@@ -82,11 +78,10 @@ async def handleMessage(bot, **kwargs):
           author_name = sender,
           **kwargs
         )
-        mtg = f"[blue]ThreadID : [/blue] {thread_id}\n"
-        mtg += f"[blue]Sender   : [/blue] {sender}\n"
+        mtg = f"[blue]Sender   : [/blue] {sender}\n"
         mtg += f"[blue]UID      : [/blue] {author_id}\n"
         mtg += f"[blue]Command  : [/blue] [yellow]{cnp}[/yellow]"
-        pnl = bot.logInfo(mtg)
+        bot.logInfo(mtg, title=f"{thread_id}")
         return await function['def'](bot, message_data)
   except bot.FBchatFacebookError as err:
     bot.error(f"{err}", 'FBchatFacebookError')

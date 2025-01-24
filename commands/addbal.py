@@ -9,7 +9,7 @@ async def fubction(bot, event):
       return await event.sendReply(":mono[ERROR: Missing amount of money to send]",True)
     user = User(int(sub))
     n = user.addMoney(int(args))
-    await event.sendReply(f"Successfully added :bold[{args}] to {n.name}\n\n:bold[Balance:] {n}", True)
+    await event.sendReply(f"Successfully added :bold[{args}] to {user.name}\n\n:bold[Balance:] {n}", True)
   except ValueError:
     await event.sendReply(":mono[Value error, please try again]",True)
 

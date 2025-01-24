@@ -5,10 +5,13 @@ from rich.panel import Panel
 
 events = []
 
-def loadEvents():
+def loadEvents(isReload=False):
   global events
   if events:
-    return events
+    if isReload:
+      events = []
+    else:
+      return events
   console = Console()
   files = list(filter(lambda file: file.endswith('.py') and
   file!='__init__.py',os.listdir('./events')))
@@ -16,6 +19,7 @@ def loadEvents():
   for file in files:
     filepath = f"events.{os.path.splitext(file)[0]}"
     module = importlib.import_module(filepath)
+    importlib.reload(module)
     config = getattr(module, 'config', None)
     if config:
       config['fileName'] = file

@@ -5,16 +5,20 @@ from rich.panel import Panel
 
 commands = {}
 
-def loadCommands(_prefix):
+def loadCommands(_prefix, isReload=False):
   global commands
   if commands:
-    return commands
+    if isReload:
+      commands = {}
+    else:
+      return commands
   console = Console()
   files = list(filter(lambda file: file.endswith('.py') and file!='__init__.py',os.listdir('./commands')))
   message = ""
   for file in files:
     filepath = f"commands.{os.path.splitext(file)[0]}"
     module = importlib.import_module(filepath)
+    importlib.reload(module)
     config = getattr(module, 'config', None)
     if config:
       name = config.get('name')

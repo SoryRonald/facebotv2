@@ -1,6 +1,9 @@
 import asyncio
 import json
 import threading
+from rich.console import Console
+from rich.panel import Panel
+from app import startapp
 from fbchat_muqit import (
   Client,
   Message,
@@ -8,14 +11,13 @@ from fbchat_muqit import (
   State,
   FBchatException, FBchatFacebookError
 )
-from handler.loadConfig import loadConfig
-from handler.loadEvents import loadEvents
-from handler.loadCommands import loadCommands
-from handler.messageHandler import handleMessage
-from handler.eventHandler import handleEvent
-from rich.console import Console
-from rich.panel import Panel
-from app import startapp
+from handler import (
+  loadConfig,
+  loadEvents,
+  loadCommands,
+  handleMessage,
+  handleEvent
+)
 
 config = json.load(open('config.json', 'r'))
 bot_running = False
@@ -55,7 +57,12 @@ class Greeg(Client):
     if kwargs['author_id'] != self.uid:
       await self._botEvent(event, **kwargs)
       asyncio.create_task(handleMessage(self, **kwargs))
-  
+  def reload_modules(self):
+    self.logInfo("Reloading modules...", title="Modules", border="yellow")
+    self.commands = loadCommands(self.prefix, isReload=True)
+    self.events = loadEvents(isReload=True)
+    self.logInfo("Modules has been reloaded", title="Modules", border="yellow")
+    
   """MESSAGE EVENTS"""
   async def onReply(self, **kwargs):
     await self._messaging("type:reply",**kwargs)

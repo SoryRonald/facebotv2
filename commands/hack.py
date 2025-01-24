@@ -25,7 +25,7 @@ def Draw(profilePath, name="Facebook user", output='commands/cache/output.jpg'):
     base_image.save(output)
     return output
   except Exception as error:
-    return ('error', error)
+    print("\033[31mERROR: \033[0m", error)
 
 async def Hack(bot, event):
   uid = event.author_id
@@ -41,8 +41,8 @@ async def Hack(bot, event):
       try:
         v = int(event.args)
         name = await event.getName(v)
-        if name == 'Facebook User':
-          return await obj.reply(f"Error while fetching the uid info")
+        #if name == 'Facebook User':
+        #  return await obj.reply(f"Error while fetching the uid info")
         uid = v
       except ValueError:
         return await obj.reply(f"Invalid usage, type '{bot.prefix}help hack' to see the usage")

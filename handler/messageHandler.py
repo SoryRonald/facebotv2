@@ -2,6 +2,27 @@ from database import Users, User
 from util import text_formatter, getName
 import os
 
+async def get_name(fetchName, uid):
+  try:
+    users = Users()
+    userX = users.get(uid)
+    if userX:
+      if userX != 'Facebook User':
+        return userX.get('name')
+    else:
+      nameX = getName(uid)
+      if nameX != 'Facebook User':
+        users.add(uid, nameX)
+        return nameX
+      fetch = await fetchName(uid)
+      print(fetch)
+      tao = fetch.get(uid)
+      name = tao.name
+      users.add(uid, name)
+      return name
+  except Exception as e:
+    print(e)
+    return "Facebook User"
 
 class MessageData:
   def __init__(self, **data):
@@ -30,26 +51,6 @@ class MessageData:
   async def sendReply(self, message, auto_font=False, mentions=None):
     text = self.font(message) if auto_font else message
     return await self.bot.sendMessage(text, self.thread_id, self.thread_type, reply_to_id=self.mid, mentions=mentions)
-
-async def get_name(fetchName, uid):
-  try:
-    users = Users()
-    userX = users.get(uid)
-    if userX:
-      if userX != 'Facebook User':
-        return userX.get('name')
-    else:
-      nameX = getName(uid)
-      if nameX != 'Facebook User':
-        users.add(uid, nameX)
-        return nameX
-      fetch = await fetchName(uid)
-      tao = fetch.get(uid)
-      name = tao.name
-      users.add(uid, name)
-      return name
-  except Exception as e:
-    return "Facebook User"
 
 async def handleMessage(bot, **kwargs):
   try:

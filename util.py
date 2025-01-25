@@ -92,7 +92,7 @@ def getUid(link):
 def getName(uid):
   try:
     response = requests.get(f"https://facebook.com/{uid}", headers={
-      "User-Agent": 'Mozilla/5.0 (Windows; U; Windows NT 5.0; de-AT; rv:1.7.11) Gecko/20050728'
+      "User-Agent": user_agent#'Mozilla/5.0 (Windows; U; Windows NT 5.0; de-AT; rv:1.7.11) Gecko/20050728'
     })
     html = BeautifulSoup(response.text, 'html.parser')
     title = html.find('title').get_text().strip()
@@ -113,7 +113,7 @@ def paster(paste: str, exp: int|None = 1) -> dict:
     
     headers = {
       "Content-Type": 'application/x-www-form-urlencoded',
-      "User-Agent": userAgent,
+      "User-Agent": user_agent,
       "Referer": url
     }
     data = {}

@@ -1,4 +1,5 @@
 import requests
+import datos
 from bs4 import BeautifulSoup
 from flask import (
   Blueprint,
@@ -9,7 +10,7 @@ view = Blueprint('view',__name__)
 
 @view.route('/')
 def root():
-  return render_template('home.html', title="Update BOT"),200
+  return render_template('home.html', title="Update BOT", bot=datos.BOT),200
 
 @view.route('/paster/<path>')
 def paster(path):

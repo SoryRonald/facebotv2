@@ -40,7 +40,7 @@ class MessageData:
     self.thread_type = data.get('thread_type')
     self.reply = None
     
-    self.line = "━━━━━━━━━━━━━━━━━━"
+    self.line = "━━━━━━━━━━━━━━"
     self.font = text_formatter
     
     if self.message_object.replied_to:

@@ -1,6 +1,7 @@
 import asyncio
 import json
 import threading
+import datos
 from rich.console import Console
 from rich.panel import Panel
 from app import startapp
@@ -21,6 +22,7 @@ from handler import (
 
 config = json.load(open('config.json', 'r'))
 bot_running = False
+bot_data = {}
 
 class Greeg(Client):
   def BOT(self, data):
@@ -105,6 +107,7 @@ class Greeg(Client):
   
 
 async def main():
+  global bot_data
   cookies_path = "fbstate.json"
   bot = await Greeg.startSession(cookies_path)
   if await bot.isLoggedIn():
@@ -112,6 +115,15 @@ async def main():
     bot_info = fetch_bot[bot.uid]
     kol = await loadConfig(bot_info.name)
     bot.BOT(kol)
+    datos.BOT = {
+      "uid": bot.uid,
+      "name": bot.name,
+      "prefix": bot.prefix or 'No prefix',
+      "owner": bot.owner,
+      "admins": ', '.join(bot.admin),
+      "events": len(bot.events),#[key for event in bot.events for key in event],
+      "commands": len(bot.commands)#[key for key,_ in bot.commands.items()]
+    }
     print(f"\033[32m[BOT] \033[0m{bot_info.name} is now logged in")
   try:
     await bot.listen()
@@ -127,6 +139,7 @@ async def main():
 
 def stopbot():
   global bot_running
+  datos.BOT = {}
   if bot_running:
     bot_running = False
 def restartbot():

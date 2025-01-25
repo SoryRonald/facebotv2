@@ -1,6 +1,8 @@
 from util import upload_imgbb
 
 async def imgbb(bot, event):
+  if event.args:
+    return await event.sendReply("This command don't need an arguments")
   if not event.reply:
     return await event.sendReply(event.font(":mono[Please reply to the image]"))
   try:

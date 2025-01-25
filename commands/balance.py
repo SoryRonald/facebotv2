@@ -7,7 +7,7 @@ async def function(bot, event):
   return await event.sendReply(f":bold[Balance:] {user.money}",True)
 
 config = {
-  "name": 'bal',
+  "name": 'balance',
   "def": function,
   "author": 'Muhammad Greegmon',
   "description": "Get the current money balance",

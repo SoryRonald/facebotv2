@@ -1,8 +1,8 @@
 async def function(bot, data):
-  message = data.get('message', '') or ''
-  tid = data.get('thread_id')
-  typ = data.get('thread_type')
-  mid = data.get('mid')
+  message = data.message or ''
+  tid = data.thread_id
+  typ = data.thread_type
+  mid = data.mid
   def check(text):
     return True if text in message.lower() else False
   if check("junmar"):

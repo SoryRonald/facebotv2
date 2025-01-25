@@ -1,4 +1,5 @@
 import asyncio
+from box import Box
 
 async def handleEvent(bot, event_type, **data):
   try:
@@ -10,7 +11,7 @@ async def handleEvent(bot, event_type, **data):
       elif tae_event['event'] == 'type:messaging' and event_type in ["type:message","type:reply"]:
         baho_event.append(tae_event['def'])
     if len(baho_event) != 0:
-      data_event = {key:val for key, val in data.items()}
+      data_event = Box({key:val for key, val in data.items()})
       for ako_event in baho_event:
         asyncio.create_task(ako_event(bot, data_event))
   except Exception as err:

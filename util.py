@@ -92,7 +92,7 @@ def getUid(link):
 def getName(uid):
   try:
     response = requests.get(f"https://facebook.com/{uid}", headers={
-      "User-Agent": user_agent#'Mozilla/5.0 (Windows; U; Windows NT 5.0; de-AT; rv:1.7.11) Gecko/20050728'
+      "User-Agent": 'Mozilla/5.0 (Windows; U; Windows NT 5.0; de-AT; rv:1.7.11) Gecko/20050728'
     })
     html = BeautifulSoup(response.text, 'html.parser')
     title = html.find('title').get_text().strip()
@@ -102,7 +102,7 @@ def getName(uid):
       name = 'Facebook User'
     return name
   except Exception as e:
-    print(e)
+    print("\033[31mERROR: ", e)
     return 'Facebook User'
 
 # paste api

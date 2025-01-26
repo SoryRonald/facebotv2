@@ -1,6 +1,7 @@
 fbchat-muqit
-Pillow
+pillow
 requests
 bs4
 dataset
 rich
+flask

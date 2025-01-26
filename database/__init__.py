@@ -1,30 +1,9 @@
 import dataset
 import datetime
-import requests
-import asyncio
-from bs4 import BeautifulSoup
 from util import PrintBox, getName
 
 log = PrintBox(title="DATABASE", border_style="green")
   
-
-class Thread:
-  def __init__(self, thread_id):
-    self._connect = dataset.connect('sqlite:///database/threads.db')
-    self.db = self._connect[thread_id]
-  
-  def insert(self, data):
-    self.db.insert(data)
-  
-  def find(self, *_clause, **kwargs):
-    return self.db.find(*_clause, **kwargs)
-  
-  def find_one(self, *arg, **kwarg):
-    return self.db.find_one(*arg, **kwarg)
-  
-  def update(self, row, keys):
-    self.db.update(row, keys)
-
 
 class Database:
   def __init__(self, table):

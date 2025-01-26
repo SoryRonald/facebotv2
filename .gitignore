@@ -7,3 +7,6 @@ jayson.json
 test.py
 fbstate.json
 create.py
+
+database.db-shm
+database.db-wal

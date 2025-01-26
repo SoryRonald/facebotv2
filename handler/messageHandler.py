@@ -15,7 +15,6 @@ async def get_name(fetchName, uid):
         users.add(uid, nameX)
         return nameX
       fetch = await fetchName(uid)
-      print(fetch)
       tao = fetch.get(uid)
       name = tao.name
       users.add(uid, name)

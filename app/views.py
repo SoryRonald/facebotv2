@@ -3,7 +3,8 @@ import datos
 from bs4 import BeautifulSoup
 from flask import (
   Blueprint,
-  render_template
+  render_template,
+  request
 )
 
 view = Blueprint('view',__name__)
@@ -21,5 +22,6 @@ def paster(path):
     if soup.find('title').text == "404 Snippet not found":
       val = "Paste not found"
   except Exception as e:
-    pass
-  return render_template('paster.html', text=val, title=f"/paster/{path}"),200
+    val = f"{e}"
+  finally:
+    return render_template('paster.html', text=val, title=f"/paster/{path}"),200

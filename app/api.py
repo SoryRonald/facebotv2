@@ -1,5 +1,6 @@
 import json
 import importlib
+import datos
 from flask import (
   Blueprint,
   render_template,
@@ -7,9 +8,6 @@ from flask import (
   url_for,
   request,
   jsonify
-)
-from .function import (
-  paster
 )
 
 api = Blueprint('api',__name__)
@@ -29,14 +27,10 @@ def bobot():
       restarter()
   return redirect(url_for('view.root'))
 
-# Paster, like pastebin
-@api.route('paster', methods=['POST'])
-def api_paster():
-  data = request.json
-  text = data.get('text')
-  if not text:
-    return jsonify({"error": "Bobo mag lagay ka ng text"}),403
-  response = paster(text, 7)
-  status = 200 if 'error' not in response else 500
-  response['host'] = request.headers['Host']
-  return jsonify(response), status
+@api.route('/logs/<session>')
+def logs(session):
+  log_session = datos.log_session
+  if session != log_session:
+    return jsonify({"error": 'Invalid log session'}),3003
+  data = datos.logs
+  return jsonify(data),200

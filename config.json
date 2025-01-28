@@ -1,9 +1,12 @@
 {
-  "prefix": "",
-  "botName": "Facebot",
+  "prefix": "/",
+  "botName": "GeegaBOT",
   "owner": "Christopher Jr.",
   "admin": [
     "61571117768115",
     "100040643049702"
-  ]
+  ],
+  "website": {
+    "admin_password": "greegmon"
+  }
 }

@@ -2,6 +2,7 @@ import asyncio
 import json
 import threading
 import datos
+import os
 from rich.console import Console
 from rich.panel import Panel
 from app import startapp
@@ -22,7 +23,6 @@ from handler import (
 
 config = json.load(open('config.json', 'r'))
 bot_running = False
-bot_data = {}
 
 class Greeg(Client):
   def BOT(self, data):
@@ -44,27 +44,43 @@ class Greeg(Client):
   async def onListening(self):
     print("\033[32m[BOT] \033[0mListening...")
     await self._botEvent('type:listening', isOnline=True)
+    self.weblog("Listening...", "BOT", "green")
     print()
   
   """CUSTOM METHOD"""
   def error(self, message, title="ERROR"):
     error = Panel(message, title=title, border_style='red')
     Console().print(error)
+  
   def logInfo(self, message, title="INFO", border="blue"):
     info = Panel(message, title=title, border_style=border)
     Console().print(info)
+  
   async def _botEvent(self, event, **data):
     asyncio.create_task(handleEvent(self, event.lower(), **data))
+  
   async def _messaging(self,event, **kwargs):
     if kwargs['author_id'] != self.uid:
       await self._botEvent(event, **kwargs)
       asyncio.create_task(handleMessage(self, **kwargs))
+  
   def reload_modules(self):
     self.logInfo("Reloading modules...", title="Modules", border="yellow")
     self.commands = loadCommands(self.prefix, isReload=True)
     self.events = loadEvents(isReload=True)
     self.logInfo("Modules has been reloaded", title="Modules", border="yellow")
-    
+  
+  def weblog(self, message, label, color="#4477CE"):
+    _data = {
+      "message": str(message),
+      "label": {
+        "text": label,
+        "color": color
+      }
+    }
+    datos.logs.append(_data)
+    datos.socket.emit('log', _data)
+  
   """MESSAGE EVENTS"""
   async def onReply(self, **kwargs):
     await self._messaging("type:reply",**kwargs)
@@ -125,17 +141,21 @@ async def main():
       "commands": len(bot.commands)#[key for key,_ in bot.commands.items()]
     }
     print(f"\033[32m[BOT] \033[0m{bot_info.name} is now logged in")
+    bot.weblog(f"{bot_info.name} is now logged in", "BOT", "green")
   try:
     await bot.listen()
   except FBchatException as g:
     stopbot() # <--
+    bot.weblog(f"{g}", "ERROR", "red")
     bot.error("{}".format(g), title="FBchatException")
   except FBchatFacebookError as g:
     stopbot() # <--
+    bot.weblog(f"{g}", "ERROR", "red")
     bot.error("{}".format(g), title="FBchatFacebookError")
   except Exception as e:
     stopbot() # <--
     bot.error(f"An error occured while trying to login, please check your bot account or get a new fbstate.\n\n{e}", title="Exception")
+    bot.weblog(f"An error occured while trying to login, please check your bot account or get a new fbstate.\n\n{e}", "BOT", "red")
 
 def stopbot():
   global bot_running
@@ -155,5 +175,14 @@ if __name__ == '__main__':
   lubot = threading.Thread(target=startbot)
   lubot.start()
   
-  app = startapp(restartbot)
-  app.run(debug=False, host='0.0.0.0')
+  PORT = os.getenv('PORT', 5000)
+  socket, app = startapp(restartbot)
+  
+  socket.run(
+    app,
+    host='0.0.0.0',
+    port=PORT,
+    debug=False,
+    allow_unsafe_werkzeug=True
+  )
+  #app.run(debug=True, host='0.0.0.0', port=PORT)

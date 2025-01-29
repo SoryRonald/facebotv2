@@ -23,4 +23,8 @@ def startapp(restartbot):
       "color": "#FF9D3D"
     }
   })
+  
+  @io.on('clearLog')
+  def clear_log(data):
+    datos.logs = []
   return io, app

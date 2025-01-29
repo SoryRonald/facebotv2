@@ -26,8 +26,8 @@ bot_running = False
 
 class Greeg(Client):
   def BOT(self, data):
-    self.commands = loadCommands(data['prefix']) # dict
-    self.events = loadEvents() # list
+    self.commands = loadCommands(data['prefix'], log=self.weblog) # dict
+    self.events = loadEvents(log=self.weblog) # list
     self.prefix = data['prefix']
     self.name = data['botName']
     self.owner = data['owner']
@@ -70,9 +70,9 @@ class Greeg(Client):
     self.events = loadEvents(isReload=True)
     self.logInfo("Modules has been reloaded", title="Modules", border="yellow")
   
-  def weblog(self, message, label, color="#4477CE"):
+  def weblog(self, message, label=None, color="#4477CE"):
     _data = {
-      "message": str(message),
+      "message": str(message) if not isinstance(message, dict) else message,
       "label": {
         "text": label,
         "color": color
@@ -172,11 +172,10 @@ def startbot():
   asyncio.run(main())
 
 if __name__ == '__main__':
-  lubot = threading.Thread(target=startbot)
-  lubot.start()
-  
-  PORT = os.getenv('PORT', 5000)
   socket, app = startapp(restartbot)
+  PORT = os.getenv('PORT', 5000)
+  
+  threading.Thread(target=startbot).start()
   
   socket.run(
     app,

@@ -83,14 +83,22 @@ async def handleMessage(bot, **kwargs):
         mtg += f"[blue]Command  : [/blue] [yellow]{cnp}[/yellow]"
         bot.logInfo(mtg, title=f"{thread_id}")
         bot.weblog(
-          f"{message}",
+          {"user": {
+            "name": sender,
+            "uid": author_id,
+            "threadId": thread_id,
+            "command": cnp
+          }},
           sender,
           "#03C988"
         )
         return await function['def'](bot, message_data)
   except bot.FBchatFacebookError as err:
+    bot.weblog(f"{err}", 'FBchatFacebookError', 'red')
     bot.error(f"{err}", 'FBchatFacebookError')
   except bot.FBchatException as err:
+    bot.weblog(f"{err}", 'FBchatException', 'red')
     bot.error(f"{err}", 'FBchatException')
   except Exception as err:
+    bot.weblog(f"{err}", 'Exception', 'red')
     bot.error(f"{err}", 'Exception')

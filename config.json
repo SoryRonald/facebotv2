@@ -1,12 +1,12 @@
 {
-  "prefix": "/",
-  "botName": "GeegaBOT",
-  "owner": "Christopher Jr.",
+  "prefix": ".",
+  "botName": "SaylBOT",
+  "owner": "Sayl",
   "admin": [
-    "61571117768115",
-    "100040643049702"
+    "100073412225038",
+    ""
   ],
   "website": {
-    "admin_password": "greegmon"
+    "admin_password": "Sayl123"
   }
 }
